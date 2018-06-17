@@ -7,12 +7,21 @@ using Unity.Transforms;
 public class Bootstrap {
 
     public static EntityManager entityManager;
-    
-    public static EntityArchetype LevelMapArchetype;
+
+    #region Archetype Def
+
+    public static EntityArchetype RenderableArchetype;
+
+    #endregion
+
+    #region RenderData Def
 
     public static RenderDataObject LevelRenderData;
 
-    // Initialize a reference to the world's EntityManager and define Archtypes.
+
+    #endregion
+
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Initialize()
     {
@@ -31,17 +40,19 @@ public class Bootstrap {
 
     public static void DefineArchetypes()
     {
-        LevelMapArchetype = entityManager.CreateArchetype(
+        RenderableArchetype = entityManager.CreateArchetype(
            typeof(Position), typeof(TransformMatrix), typeof(MeshInstanceRenderer));
+
+
     }
 
     public static void NewGame()
     {
-        var cube = entityManager.CreateEntity(LevelMapArchetype);
+        var level = entityManager.CreateEntity(RenderableArchetype);
 
-        entityManager.SetComponentData(cube, new Position { Value = new float3(0.0f, 0.0f, 0.0f) });
+        entityManager.SetComponentData(level, new Position { Value = new float3(0.0f, 0.0f, 0.0f) });
 
-        entityManager.SetSharedComponentData (cube, new MeshInstanceRenderer
+        entityManager.SetSharedComponentData (level, new MeshInstanceRenderer
         {
             mesh = LevelRenderData.Mesh.Value,
             material = LevelRenderData.Material.Value

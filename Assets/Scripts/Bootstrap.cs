@@ -8,9 +8,10 @@ public class Bootstrap {
 
     public static EntityManager entityManager;
 
-    public static EntityArchetype BasicArchetype;
+    public static EntityArchetype LevelMapArchetype;
 
-    public static ObjectLook cubeLook;
+    public static MeshDataObject LevelMeshData;
+    public static MaterialDataObject LevelMaterialData;
 
     // Initialize a reference to the world's EntityManager and define Archtypes.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -24,7 +25,8 @@ public class Bootstrap {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void InitializeWithScene()
     {
-        cubeLook = Resources.Load("Data/CubeLook") as ObjectLook;
+        LevelMeshData = Resources.Load("Data/LevelMeshData") as MeshDataObject;
+        LevelMaterialData = Resources.Load("Data/LevelMaterialData") as MaterialDataObject;
 
         NewGame();
     }
@@ -32,26 +34,28 @@ public class Bootstrap {
     public static void DefineArchetypes()
     {
         // THIS WORKS.
-        BasicArchetype = entityManager.CreateArchetype(
+        LevelMapArchetype = entityManager.CreateArchetype(
             typeof(Position), typeof(TransformMatrix));
 
         // DOES NOT WORK THIS WAY!
-        //BasicArchetype = entityManager.CreateArchetype(
+        //LevelMapArchetype = entityManager.CreateArchetype(
         //  typeof(Position), typeof(TransformMatrix), typeof(MeshInstanceRenderer));
     }
 
     public static void NewGame()
     {
-        var cube = entityManager.CreateEntity(BasicArchetype);
+        var cube = entityManager.CreateEntity(LevelMapArchetype);
 
         entityManager.SetComponentData(cube, new Position { Value = new float3(0.0f, 0.0f, 0.0f) });
 
         // The line below adds a second MeshInstanceRenderer and will cause an error
         // if you also include it in the Archetype definition above.
         entityManager.AddSharedComponentData (cube, new MeshInstanceRenderer
-            { mesh = cubeLook.Mesh, material = cubeLook.Material });
-
-        Debug.LogError($"cubeLook is NULL: {cubeLook == null} | Mat: {cubeLook.Material.name} | Mesh: {cubeLook.Mesh.name}");
+        {
+            mesh = LevelMeshData.Value,
+            material = LevelMaterialData.Value
+        });
+        
     }
 }
 

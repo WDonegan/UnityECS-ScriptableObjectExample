@@ -8,8 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bb3447771f583f48a5159b33df5e620, type: 3}
-  m_Name: CubeLook
+  m_Script: {fileID: 11500000, guid: d721f3f24f287d24a8a223a79d7ae20d, type: 3}
+  m_Name: LevelMaterialData
   m_EditorClassIdentifier: 
-  Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  Material: {fileID: 2100000, guid: 0aaf3f0cf6537fc46aa3d1407c942eb8, type: 2}
+  Value: {fileID: 2100000, guid: 0aaf3f0cf6537fc46aa3d1407c942eb8, type: 2}

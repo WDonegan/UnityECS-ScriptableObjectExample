@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8275c83510d12bd4fb04ca74c7f99fa0, type: 3}
   m_Name: LevelRenderData
   m_EditorClassIdentifier: 
-  Mesh: {fileID: 0}
-  Material: {fileID: 0}
+  Mesh: {fileID: 11400000, guid: f0c08b3735c2f1b4f85029f42c367c28, type: 2}
+  Material: {fileID: 11400000, guid: 7f6cfc4584237024ea99f0d1a3c9607c, type: 2}

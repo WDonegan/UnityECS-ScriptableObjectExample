@@ -10,8 +10,7 @@ public class Bootstrap {
 
     public static EntityArchetype LevelMapArchetype;
 
-    public static MeshDataObject LevelMeshData;
-    public static MaterialDataObject LevelMaterialData;
+    public static RenderDataObject LevelRenderData;
 
     // Initialize a reference to the world's EntityManager and define Archtypes.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -25,8 +24,7 @@ public class Bootstrap {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void InitializeWithScene()
     {
-        LevelMeshData = Resources.Load("Data/LevelMeshData") as MeshDataObject;
-        LevelMaterialData = Resources.Load("Data/LevelMaterialData") as MaterialDataObject;
+        LevelRenderData = Resources.Load("Data/LevelRenderData") as RenderDataObject;
 
         NewGame();
     }
@@ -52,8 +50,8 @@ public class Bootstrap {
         // if you also include it in the Archetype definition above.
         entityManager.AddSharedComponentData (cube, new MeshInstanceRenderer
         {
-            mesh = LevelMeshData.Value,
-            material = LevelMaterialData.Value
+            mesh = LevelRenderData.Mesh.Value,
+            material = LevelRenderData.Material.Value
         });
         
     }

@@ -8,8 +8,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8275c83510d12bd4fb04ca74c7f99fa0, type: 3}
-  m_Name: LevelRenderData
+  m_Script: {fileID: 11500000, guid: b3eb1f60e3f385e4cadd69187c5f5ca7, type: 3}
+  m_Name: CubeMesh
   m_EditorClassIdentifier: 
-  Mesh: {fileID: 11400000, guid: f0c08b3735c2f1b4f85029f42c367c28, type: 2}
-  Material: {fileID: 11400000, guid: 7f6cfc4584237024ea99f0d1a3c9607c, type: 2}
+  Value: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}

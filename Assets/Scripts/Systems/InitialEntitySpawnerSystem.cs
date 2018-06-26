@@ -66,15 +66,17 @@ class InitialEntitySpawnerSystem : ComponentSystem
             if (spawnsRemaining)
             {
                 var spawnsLeft = data.SpawnCountMax - state.SpawnedEntitiesCount;
- 
-                
+
+
                 for (var i = 0; i < Mathf.Min(data.SpawnBatchSize, spawnsLeft); i++)
                 {
                     SpawnEntity();
                 }
             }
+            else
+                this.Enabled = false;
         }
-        // End Spawn Processing
+        
     }
 
     void SpawnEntity()
@@ -88,11 +90,13 @@ class InitialEntitySpawnerSystem : ComponentSystem
         PostUpdateCommands.CreateEntity(Bootstrap.MovableArchetype);
 
         var Heading = ComputeHeading();
+        var Speed = ComputeSpeed();
 
-        PostUpdateCommands.SetComponent(new Position { Value = Heading * (ComputeSpeed() + 8) });
+        PostUpdateCommands.SetComponent(new Position { Value = Heading * (Speed + 8) });
 
         var massColor = Random.Range(0, Bootstrap.cubeRenderData.Materials.Value.Length);
 
+        
         PostUpdateCommands.SetSharedComponent(new MeshInstanceRenderer {
             mesh = Bootstrap.cubeRenderData.Mesh.Value,
             material = Bootstrap.cubeRenderData.Materials.Value[ massColor ]

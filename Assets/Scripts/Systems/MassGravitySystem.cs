@@ -86,7 +86,7 @@ class MassGravitySystem : JobComponentSystem
             Masses = m_Data.Mass,
             Positions = m_Data.Position,
             Velocities = m_Data.Velocity,
-        }.Schedule(m_Data.Length, 1, inputDeps);
+        }.Schedule(m_Data.Length, 64, inputDeps);
 
         return jobHandle;
     }

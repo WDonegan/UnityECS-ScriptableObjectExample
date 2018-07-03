@@ -2,12 +2,14 @@
   "dependencies": {
     "com.unity.package-manager-ui": "1.9.10",
     "com.unity.entities": "0.0.12-preview.6",
-    "com.unity.incrementalcompiler": "0.0.42-preview.1"
+    "com.unity.incrementalcompiler": "0.0.42-preview.1",
+    "com.unity.postprocessing": "0.1.8"
   },
   "testables": [
-      "com.unity.collections", 
-      "com.unity.entities", 
-      "com.unity.jobs"
+    "com.unity.collections",
+    "com.unity.entities",
+    "com.unity.mathmatics",
+    "com.unity.jobs"
   ],
   "registry": "https://packages.unity.com"
 }

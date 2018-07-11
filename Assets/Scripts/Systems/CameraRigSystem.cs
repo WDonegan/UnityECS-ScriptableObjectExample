@@ -15,6 +15,14 @@ namespace SOExample.Systems
         }
         [Inject] Data m_data;
         
+        public struct Orbitals
+        {
+            public int Length;
+            public ComponentDataArray<Components.Transform.Pos> Positions;
+            public ComponentDataArray<Components.Transform.Mass> Masses;
+        }
+        [Inject] Orbitals m_Orbitals;
+
         protected override void OnUpdate()
         {
             var rotation = m_data.Transform[0].rotation;
@@ -25,6 +33,15 @@ namespace SOExample.Systems
 
             m_data.CameraRig[0].CurrentRotation = camRig.CurrentRotation;
             m_data.Transform[0].rotation = rotation;
+
+            for (int i = 0; i < m_Orbitals.Length; ++i)
+            {
+                if (m_Orbitals.Masses[i].Value == 5000)
+                {
+                    m_data.Transform[0].position = m_Orbitals.Positions[i].Value;
+                }
+            }
+            
         }
 
         public static quaternion euler(float3 xyz)

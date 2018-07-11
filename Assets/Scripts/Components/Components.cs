@@ -4,10 +4,6 @@ using Unity.Mathematics;
 
 namespace SOExample.Components
 {
-    public struct Active : IComponentData
-    {
-        float Value;
-    }
 
     public struct SpawnerCooldown : IComponentData
     {

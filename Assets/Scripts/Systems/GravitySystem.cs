@@ -11,11 +11,10 @@ namespace SOExample.Systems
     [UpdateBefore(typeof(UpdateGroups.RenderingGroup))]
     public class GravitySystem : JobComponentSystem
     {
-
         public struct Data
         {
             public int Length;
-            [ReadOnly] public ComponentDataArray<Mass> Mass;
+            public ComponentDataArray<Mass> Mass;
             public ComponentDataArray<Pos> Pos;
             public ComponentDataArray<Velocity> Velocity;
         }
@@ -23,13 +22,15 @@ namespace SOExample.Systems
         [Inject] Data m_Data;
 
         private const float G = 6.67f;
-        private const float D = 0.9987f;
+        private const float D = 0.999987f;
 
         [BurstCompile]
         struct CalculateAttractions : IJobParallelFor
         {
             [ReadOnly] public float DeltaTime;
-            [ReadOnly] public ComponentDataArray<Mass> Masses;
+
+            [NativeDisableParallelForRestriction]
+            public ComponentDataArray<Mass> Masses;
 
             [NativeDisableParallelForRestriction]
             public ComponentDataArray<Pos> Positions;
@@ -39,7 +40,7 @@ namespace SOExample.Systems
 
             public void Execute(int index)
             {
-                float massSelf = Masses[index].Value;
+                var massSelf = Masses[index];
                 var positionSelf = Positions[index];
                 var velocitySelf = Velocities[index];
 
@@ -47,11 +48,11 @@ namespace SOExample.Systems
 
                 float mass;
                 float3 position;
-                float3 velocity;
 
                 float3 deltaPos;
                 float3 direction;
                 float attraction;
+
 
                 for (int j = 0; j < Positions.Length; ++j)
                 {
@@ -60,17 +61,18 @@ namespace SOExample.Systems
 
                     mass = Masses[j].Value;
                     position = Positions[j].Value;
-                    velocity = Velocities[j].Value;
 
-                    deltaPos = (position + velocity) - positionSelf.Value;
+                    deltaPos = position - positionSelf.Value;
+
                     direction = math.normalize(position - positionSelf.Value);
-                    attraction = G * ((massSelf * mass) / math.dot(deltaPos, deltaPos));
-
+                    attraction = G * (massSelf.Value * mass) / math.dot(deltaPos, deltaPos);
                     attractionSelf += direction * attraction;
                 }
 
-                velocitySelf.Value += attractionSelf;
-                velocitySelf.Value = velocitySelf.Value * D;
+                //Masses[index] = massSelf;
+
+                velocitySelf.Value += (attractionSelf / massSelf.Value *2f);
+                velocitySelf.Value *= D;
                 Velocities[index] = velocitySelf;
 
                 positionSelf.Value += velocitySelf.Value * DeltaTime;

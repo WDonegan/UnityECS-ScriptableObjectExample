@@ -31,7 +31,7 @@ namespace SOExample.Systems
                 var state = m_State.S[0];
                 var spawnAmount = m_State.D[0].SpawnAmount;
                 var spawnArea = m_State.D[0].SpawnArea;
-
+                    
                 var oldState = Random.state;
                 Random.state = state.RandomState;
 
@@ -40,10 +40,12 @@ namespace SOExample.Systems
 
                 if (spawnsRemaining)
                 {
+                    var spawnMats = (Resources.Load("ColorLerp") as DataObjects.ColorLerp).Materials;
+
                     for (var i = 0; i < math.min(spawnAmount.BatchSize, spawnsLeft); ++i)
                     {
                         state.CurrentCount++;
-                        SpawnEntity(spawnArea.Origin, spawnArea.Radius);
+                        SpawnEntity(spawnArea.Origin, spawnArea.Radius, spawnMats);
                     }
                 }
                 else
@@ -72,6 +74,8 @@ namespace SOExample.Systems
 
             return spawn;
         }
+
+        
         
         /// <summary>
         /// A random radian value from -2 * <see cref="Mathf.PI"/> to 2 * <see cref="Mathf.PI"/> 
@@ -80,7 +84,7 @@ namespace SOExample.Systems
 
         ///<summary>
         /// A shortened version of the Cross product equation
-        /// using a single point, and extrapolated second point. 
+        /// using a single point, and an extrapolated second point. 
         /// Returns a normalized unit vector perpendicular to 
         /// the point and the origin.
         /// </summary>
@@ -103,7 +107,7 @@ namespace SOExample.Systems
         /// </summary>
         /// <param name="origin">The origin of the spawn sphere.</param>
         /// <param name="range">The minimun and maximum range from the origin.</param>
-        void SpawnEntity(float3 origin, DataObjects.MinMax range)
+        void SpawnEntity(float3 origin, DataObjects.MinMax range, Material[] materials)
         {
             var pos = new float3
             {
@@ -113,7 +117,7 @@ namespace SOExample.Systems
             };
 
             PostUpdateCommands.CreateEntity(Archtype.GravitySphere);
-            
+
             PostUpdateCommands.SetComponent(new Pos
             {
                 Value = (pos * Random.Range(range.Min, range.Max)) + origin
@@ -128,17 +132,17 @@ namespace SOExample.Systems
 
             PostUpdateCommands.SetComponent(new Scl
             {
-                Value = new float3 { x = 1, y = 1, z = 1 } * (massScale * 3 + 1) 
+                Value = new float3 { x = 1, y = 1, z = 1 } * math.round(massScale * 3 + 1)
             });
 
             PostUpdateCommands.SetComponent(new Mass
             {
-                Value = massScale * 3 + 1
+                Value = (massScale * 3 + 1) * 3f
             });
 
             PostUpdateCommands.SetComponent(new Velocity
             {
-                Value = perpDirection(pos) * 50
+                Value = perpDirection(pos) * range.Min
             });
 
             PostUpdateCommands.SetComponent(new ModelMatrix
@@ -146,16 +150,11 @@ namespace SOExample.Systems
                 Value = float4x4.identity
             });
 
-            var colors = (Resources.Load("ColorLerp") as DataObjects.ColorLerp).Colors;
-            var index = (int) math.clamp(math.round(colors.Length * massScale), 0, colors.Length - 1);
+            var index = (int) math.clamp(math.round(materials.Length * massScale), 0, materials.Length - 1);
 
             PostUpdateCommands.SetSharedComponent(new MeshInstanceRenderer
             {
-                material = new Material(Shader.Find("Standard"))
-                {
-                    color = colors[index],
-                    enableInstancing = true
-                },
+                material = materials[index],
                 mesh = (Resources.Load("CubeData") as DataObjects.MeshData).Value,
 
                 receiveShadows = true,

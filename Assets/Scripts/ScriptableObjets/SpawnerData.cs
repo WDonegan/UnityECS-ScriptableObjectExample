@@ -36,7 +36,8 @@ namespace SOExample.DataObjects
         public int Seed;
         public float Cooldown;
         public SpawnAmount SpawnAmount;
-        public SpawnArea SpanwArea;
+        public SpawnArea SpawnArea;
+        public ColorLerp MaterialColors;
     }
 
     [CreateAssetMenu(fileName = "SpawnerData", menuName = "SpawnerSetup")]
